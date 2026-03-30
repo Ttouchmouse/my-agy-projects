@@ -22,10 +22,6 @@ export interface Message {
 }
 
 export interface AppState {
-  // Demo Mode
-  isDemoMode: boolean;
-  setDemoMode: (isDemo: boolean) => void;
-
   // Persona
   persona: PersonaState;
   setPersona: (persona: Partial<PersonaState>) => void;
@@ -52,7 +48,6 @@ export const useStore = create<AppState>((set) => ({
   },
   messages: [],
   isStreaming: false,
-  isDemoMode: true,
 
   setImage: (image) => set({ image }),
   setPersona: (personaUpdate) => set((state) => ({ 
@@ -70,5 +65,4 @@ export const useStore = create<AppState>((set) => ({
   }),
   clearChat: () => set({ messages: [], image: null }),
   setStreaming: (streaming) => set({ isStreaming: streaming }),
-  setDemoMode: (isDemo) => set({ isDemoMode: isDemo }),
 }));
