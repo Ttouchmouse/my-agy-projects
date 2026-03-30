@@ -4,7 +4,7 @@ import { useStore } from "../store/useStore.ts";
 import type { AppState } from "../store/useStore.ts";
 import toast from "react-hot-toast";
 
-export const useGlobalImageUpload = () => {
+export const useGlobalImageUpload = ({ registerPasteListener = false } = {}) => {
   const setImage = useStore((s: AppState) => s.setImage);
   const isStreaming = useStore((s: AppState) => s.isStreaming);
   const previewUrlRef = useRef<string | null>(null);
@@ -76,6 +76,7 @@ export const useGlobalImageUpload = () => {
   };
 
   useEffect(() => {
+    if (!registerPasteListener) return;
     document.addEventListener("paste", handlePaste);
     return () => {
       document.removeEventListener("paste", handlePaste);
@@ -83,7 +84,7 @@ export const useGlobalImageUpload = () => {
         URL.revokeObjectURL(previewUrlRef.current);
       }
     };
-  }, [isStreaming]); // isStreaming 상태가 변경될 때마다 이벤트 리스너 업데이트
+  }, [isStreaming, registerPasteListener]); // isStreaming 상태가 변경될 때마다 이벤트 리스너 업데이트
 
   return { handleImageUpload };
 };

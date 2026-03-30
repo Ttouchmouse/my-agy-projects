@@ -6,7 +6,7 @@ import { useGlobalImageUpload } from './hooks/useGlobalImageUpload.ts';
 
 function App() {
   const { setDemoMode } = useStore();
-  useGlobalImageUpload(); // 활성화 (전역 복붙 리스너 등)
+  useGlobalImageUpload({ registerPasteListener: true }); // 활성화 (전역 복붙 리스너 등)
 
   useEffect(() => {
     const hasKey = !!import.meta.env.VITE_OPENAI_API_KEY;
