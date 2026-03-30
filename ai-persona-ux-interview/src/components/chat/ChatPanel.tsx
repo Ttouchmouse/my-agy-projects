@@ -3,9 +3,11 @@ import { useStore } from '../../store/useStore.ts';
 import { ChatInput } from './ChatInput.tsx';
 import { QuickPrompts } from './QuickPrompts.tsx';
 import { MessageSquare, Bot, AlertCircle } from 'lucide-react';
+import { getAppEnv } from '../../lib/env.ts';
 
 export function ChatPanel() {
   const { messages, image, isStreaming } = useStore();
+  const env = getAppEnv();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,6 +29,10 @@ export function ChatPanel() {
         <div className="flex items-center gap-3">
           <MessageSquare className="w-4 h-4 text-[var(--color-primary)]" />
           <h2 className="text-[13px] font-[500] text-[var(--color-text-main)] uppercase tracking-widest">인터뷰 기록</h2>
+        </div>
+
+        <div style={{ fontSize: 12, color: "#999" }}>
+          {env}
         </div>
       </div>
 
