@@ -56,18 +56,18 @@
 
 @theme {
   --font-sans: 'PretendardJP', sans-serif;
-  
-  --color-primary: #3182F6;
-  --color-primary-hover: #1b64da;
-  
-  --color-surface-bg: #F5F6F8;
+
+  --color-primary: #2E394A;
+  --color-primary-hover: #1a2535;
+
+  --color-surface-bg: #F6F7F9;
   --color-surface-white: #FFFFFF;
-  --color-surface-border: #E8EAED;
-  --color-surface-chat-mod: #F0F5FF;
-  
-  --color-text-main: #191F28;
-  --color-text-sub: #4E5968;
-  --color-text-muted: #8B95A1;
+  --color-surface-border: #DCE1E5;
+  --color-surface-chat-mod: #EFF2F6;
+
+  --color-text-main: #2E394A;
+  --color-text-sub: #8996A4;
+  --color-text-muted: #8996A4;
 }
 
 @layer base {

@@ -68,28 +68,29 @@ export function FilterChips() {
   };
 
   return (
-    <div className="flex flex-wrap gap-2 mt-4" ref={dropdownRef}>
-      
-      {/* Region Chip */}
+    <div className="flex flex-wrap gap-2" ref={dropdownRef}>
+
+      {/* Region Dropdown */}
       <div className="relative">
-        <button 
+        <button
           onClick={() => setActiveDropdown(activeDropdown === 'region' ? null : 'region')}
-          className="flex items-center gap-1 bg-white border border-[#E2E4E8] rounded-[20px] px-3 py-1.5 text-[13px] text-[#1A1A1A] cursor-pointer hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 bg-white border border-[#D0D6DD] rounded-[8px] px-3 py-2 text-[14px] text-[#2E394A] cursor-pointer hover:bg-[#F6F7F9] transition-colors whitespace-nowrap"
         >
-          {getRegionLabel()} <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+          <span>국적 · {getRegionLabel()}</span>
+          <ChevronDown className="w-4 h-4 text-[#8996A4] flex-shrink-0" />
         </button>
         {activeDropdown === 'region' && (
-          <div className="absolute top-full left-0 mt-1 w-36 bg-white border border-[#E2E4E8] rounded-xl shadow-lg z-50 overflow-hidden text-[13px]">
+          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-[#D0D6DD] rounded-[8px] shadow-lg z-50 overflow-hidden text-[14px]">
             {[
               { label: '북미', value: '북미|영어' },
               { label: '한국', value: '한국|한국어' },
               { label: '일본', value: '일본|일본어' },
               { label: '유럽', value: '유럽|영어' }
             ].map(opt => (
-              <button 
+              <button
                 key={opt.value}
                 onClick={() => handleSelect('region_language', opt.value)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors"
+                className="w-full text-left px-4 py-2.5 hover:bg-[#F6F7F9] transition-colors text-[#2E394A]"
               >
                 {opt.label}
               </button>
@@ -98,25 +99,26 @@ export function FilterChips() {
         )}
       </div>
 
-      {/* Age Group Chip */}
-      <div className="relative">
-        <button 
+      {/* Age Group Dropdown */}
+      <div className="relative flex-1 min-w-0">
+        <button
           onClick={() => setActiveDropdown(activeDropdown === 'age' ? null : 'age')}
-          className="flex items-center gap-1 bg-white border border-[#E2E4E8] rounded-[20px] px-3 py-1.5 text-[13px] text-[#1A1A1A] cursor-pointer hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center justify-between gap-2 bg-white border border-[#D0D6DD] rounded-[8px] px-3 py-2 text-[14px] text-[#2E394A] cursor-pointer hover:bg-[#F6F7F9] transition-colors"
         >
-          연령대 · {getAgeGroupLabel()} <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+          <span>연령대 · {getAgeGroupLabel()}</span>
+          <ChevronDown className="w-4 h-4 text-[#8996A4] flex-shrink-0" />
         </button>
         {activeDropdown === 'age' && (
-          <div className="absolute top-full left-0 mt-1 w-40 bg-white border border-[#E2E4E8] rounded-xl shadow-lg z-50 overflow-hidden text-[13px]">
+          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-[#D0D6DD] rounded-[8px] shadow-lg z-50 overflow-hidden text-[14px]">
             {[
               { label: '10대 / 20대', value: 'teens / 20s' },
               { label: '30대 / 40대', value: '30s / 40s' },
               { label: '50대 이상', value: '50+' }
             ].map(opt => (
-              <button 
+              <button
                 key={opt.value}
                 onClick={() => handleSelect('ageGroup', opt.value)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors"
+                className="w-full text-left px-4 py-2.5 hover:bg-[#F6F7F9] transition-colors text-[#2E394A]"
               >
                 {opt.label}
               </button>
@@ -125,26 +127,27 @@ export function FilterChips() {
         )}
       </div>
 
-      {/* User Type Chip */}
-      <div className="relative">
-        <button 
+      {/* User Type Dropdown */}
+      <div className="relative w-full">
+        <button
           onClick={() => setActiveDropdown(activeDropdown === 'type' ? null : 'type')}
-          className="flex items-center gap-1 bg-white border border-[#E2E4E8] rounded-[20px] px-3 py-1.5 text-[13px] text-[#1A1A1A] cursor-pointer hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center justify-between gap-2 bg-white border border-[#D0D6DD] rounded-[8px] px-3 py-2 text-[14px] text-[#2E394A] cursor-pointer hover:bg-[#F6F7F9] transition-colors"
         >
-          상태 · {getUserTypeLabel()} <ChevronDown className="w-3.5 h-3.5 text-gray-500" />
+          <span>상태 · {getUserTypeLabel()}</span>
+          <ChevronDown className="w-4 h-4 text-[#8996A4] flex-shrink-0" />
         </button>
         {activeDropdown === 'type' && (
-          <div className="absolute top-full left-0 mt-1 w-40 bg-white border border-[#E2E4E8] rounded-xl shadow-lg z-50 overflow-hidden text-[13px]">
+          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-[#D0D6DD] rounded-[8px] shadow-lg z-50 overflow-hidden text-[14px]">
             {[
               { label: '신규 사용자', value: 'new user' },
               { label: '기존 사용자', value: 'existing user' },
               { label: '유료 사용자', value: 'paying user' },
               { label: 'VIP 사용자', value: 'VIP user' }
             ].map(opt => (
-              <button 
+              <button
                 key={opt.value}
                 onClick={() => handleSelect('userType', opt.value)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors"
+                className="w-full text-left px-4 py-2.5 hover:bg-[#F6F7F9] transition-colors text-[#2E394A]"
               >
                 {opt.label}
               </button>

@@ -1,25 +1,61 @@
-import React, { useState, useEffect } from 'react';
-import { Send } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowUp } from 'lucide-react';
 import { useStore, type Message } from '../../store/useStore.ts';
 import { generatePersonaReply } from '../../lib/openai.ts';
 import { generateFollowUpQuestions } from '../../lib/followUp.ts';
+import { generateInitialQuestions } from '../../lib/initialQuestions.ts';
 
 let callId = 0;
 
 export function ChatInput() {
   const [inputValue, setInputValue] = useState('');
+  const lastImageIdRef = useRef<string | null>(null);
+
   const {
     image, persona, messages,
     addMessage, updateLastMessage,
     isStreaming, setStreaming,
+    initialQuestions,
+    setInitialQuestions, setIsGeneratingInitialQuestions, clearInitialQuestions,
     clearFollowUpQuestions,
     setIsGeneratingFollowUp,
     setFollowUpQuestions,
   } = useStore();
 
+  // Generate initial questions once when a new image is uploaded (before any messages)
+  useEffect(() => {
+    if (!image?.base64) {
+      clearInitialQuestions();
+      lastImageIdRef.current = null;
+      return;
+    }
+    // Only generate if this is a new image and conversation hasn't started
+    if (image.id === lastImageIdRef.current) return;
+    if (messages.length > 0) return;
+
+    lastImageIdRef.current = image.id;
+    setIsGeneratingInitialQuestions(true);
+
+    generateInitialQuestions(image)
+      .then((questions) => {
+        setInitialQuestions(questions);
+      })
+      .catch(() => {
+        clearInitialQuestions();
+      })
+      .finally(() => {
+        setIsGeneratingInitialQuestions(false);
+      });
+  }, [image]); // Only watch image — intentionally excludes messages to avoid re-triggering
+
   const handleSend = async (overrideMessage?: string) => {
     const textToSend = overrideMessage || inputValue.trim();
     if (!textToSend || !image || isStreaming) return;
+
+    // Clear initial questions on first send
+    if (messages.length === 0 && initialQuestions.length > 0) {
+      clearInitialQuestions();
+    }
 
     setInputValue('');
     setStreaming(true);
@@ -121,31 +157,29 @@ export function ChatInput() {
   const disabled = !image || isStreaming;
 
   return (
-    <div className="relative flex items-end gap-4 w-full">
-      <div className="flex-1 bg-white border-b border-[var(--color-surface-border)] p-1 focus-within:border-[var(--color-primary)] transition-colors rounded-none">
-        <textarea
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={
-            !image
-              ? '인터뷰를 시작하려면 먼저 이미지를 업로드하세요...'
-              : isStreaming
-                ? '응답 중...'
-                : '질문을 입력해주세요... (Shift+Enter 줄바꿈)'
-          }
-          disabled={disabled}
-          className="w-full max-h-32 min-h-[44px] bg-transparent resize-none outline-none py-2 px-2 text-[14px] font-[400] text-[var(--color-text-main)] placeholder:text-[var(--color-text-muted)] disabled:opacity-50"
-          rows={1}
-        />
-      </div>
+    <div className="relative w-full bg-white border border-[#D0D6DD] rounded-[18px] px-[18px] pt-[18px] pb-[18px] focus-within:border-[#000] transition-colors">
+      <textarea
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder={
+          !image
+            ? '질문을 위해 테스트 화면을 업로드해 주세요...'
+            : isStreaming
+              ? '응답 중...'
+              : '질문을 입력해 주세요...'
+        }
+        disabled={disabled}
+        className="w-full min-h-[72px] max-h-[200px] bg-transparent resize-none outline-none text-[16px] font-[400] text-[#2E394A] placeholder:text-[#8996A4] disabled:opacity-50 leading-[1.5] pr-[56px]"
+        rows={3}
+      />
 
       <button
         onClick={() => handleSend()}
         disabled={disabled || !inputValue.trim()}
-        className="w-12 h-12 mb-1 shrink-0 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] disabled:bg-[var(--color-surface-border)] text-white rounded-[6px] flex items-center justify-center transition-colors shadow-none"
+        className="absolute bottom-[18px] right-[18px] w-[44px] h-[44px] flex-shrink-0 bg-[#2E394A] hover:bg-[#1a2535] disabled:bg-[#D0D6DD] text-white rounded-full flex items-center justify-center transition-colors"
       >
-        <Send className="w-5 h-5 ml-1" />
+        <ArrowUp className="w-5 h-5" />
       </button>
     </div>
   );
